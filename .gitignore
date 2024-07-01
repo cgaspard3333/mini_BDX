@@ -6,3 +6,4 @@ experiments/RL/data/*
 experiments/RL/new/logs/
 experiments/RL/new/sac/
 print/
+model_sigma/

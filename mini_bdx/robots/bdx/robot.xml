@@ -50,8 +50,9 @@
   </default>
   <worldbody>
     <body name="base" pos="0 0 0.21">
-      <freejoint />
+      <freejoint name="root" />
       <body name="body_module">
+        <site name="torso" />
         <inertial pos="-0.00689065 -0.00643983 0.00826352" quat="0.425895 0.565899 0.568331 0.418773" mass="0.497275" diaginertia="0.00134734 0.00103255 0.000841023"/>
         <geom pos="-0.0498729 -0.114143 0.0150789" quat="0.707107 0 0 0.707107" type="mesh" rgba="0.647059 0.647059 0.647059 1" mesh="cage_bottom"/>
         <geom pos="-0.0423729 0.0283961 0.0135789" quat="0.707107 -0.707107 0 0" type="mesh" rgba="0.901961 0.901961 0.901961 1" mesh="power_switch"/>
@@ -94,6 +95,7 @@
         <geom pos="-0.0460415 0.0505915 0.0547789" quat="0 0 -1 0" type="mesh" rgba="0 0.294118 0.654902 1" mesh="pcb_u2d2.prt"/>
         <geom pos="-0.0557378 0.0118436 0.0569404" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.6 0.6 0.6 1" mesh="micro_usb_2_0_connector__ab_rec.prt"/>
         <geom pos="-0.0513894 -0.00114389 0.0465789" quat="0.5 0.5 0.5 0.5" type="mesh" rgba="0.6 0.6 0.6 1" mesh="39281023.prt"/>
+        <site name="trunk" pos="0.0325271 -0.0066039 0.0125789" />
         <body name="trunk" pos="0.0325271 -0.0066039 0.0125789" quat="1 0 0 0">
           <inertial pos="0 0 0" mass="1e-09" diaginertia="0 0 0"/>
         </body>
@@ -256,4 +258,8 @@
     <position name="head_pitch"      joint="head_pitch"      inheritrange="1"/>
     <position name="head_yaw"        joint="head_yaw"        inheritrange="1"/>
   </actuator>
+  <sensor>
+    <gyro site="torso" name="gyro" />
+  </sensor>
+
 </mujoco>
