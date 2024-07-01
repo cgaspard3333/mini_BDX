@@ -153,9 +153,6 @@ class StandupEnv(gymnasium.Env):
         self.forcerange_original = self.sim.model.actuator_forcerange.copy()
         self.body_quat_original = self.sim.model.body_quat.copy()
 
-        self.going_to_push = False
-        self.tic = 0
-
         # Loading initial configuration cache
         initial_config_path = self.get_initial_config_filename()
         self.initial_config = None
@@ -289,17 +286,6 @@ class StandupEnv(gymnasium.Env):
 
         reward = np.exp(-20*(np.linalg.norm(np.array(state_current) - np.array(self.options["desired_state"]))**2))
 
-        if (reward > np.random.uniform(0.9, 1)) and not self.going_to_push:
-            self.tic = self.sim.t
-            self.going_to_push = True
-
-        if self.going_to_push and (self.sim.t - self.tic) > np.random.uniform(1, 2):
-            force_x = np.random.uniform(-2500, 2500)
-            print(force_x)
-            self.sim.give_a_push("base", [force_x, 0, 0])
-            self.going_to_push = False
-            self.tic = 0
-
         action_variation = np.abs(action - self.previous_actions[-1])
         self.previous_actions.append(action)
         self.previous_actions = self.previous_actions[-self.options["previous_actions"] :]
@@ -421,8 +407,6 @@ class StandupEnv(gymnasium.Env):
     ):
         super().reset(seed=seed)
         self.sim.reset()
-        self.going_to_push = False
-        self.tic = 0
 
         # Initial robot configuration
         if use_cache and self.initial_config is not None:
