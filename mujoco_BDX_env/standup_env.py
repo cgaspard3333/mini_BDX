@@ -24,11 +24,27 @@ class StandupEnv(gymnasium.Env):
             # Is the render done in "realtime"
             "render_realtime": True,
             # Target robot state (q_motors, tilt) [rad^6]
-            # ["left_hip_pitch", "right_hip_pitch", "left_knee", "right_knee", "left_ankle", "right_ankle", "neck_pitch", "head_pitch"]
-            "desired_state": np.deg2rad([45, 45, -90, -90, 45, 45, -45, -45, 0.0]),
+            # ["left_hip_pitch", "right_hip_pitch", "left_knee", "right_knee", "left_ankle", "right_ankle", "neck_pitch", "head_pitch", "trunk_tilt"]
+            # "desired_state": np.deg2rad([45, 45, -90, -90, 45, 45, -45, -45, 0.0]),
+            "desired_state" : [
+                -0.013946457213457239,
+                0.07918837709879874,
+                0.5325073962634973,
+                -1.6225192902713386,
+                0.9149246381274986,
+                0.013627156377842975,
+                0.07738878096596595,
+                0.5933527914082196,
+                -1.630548419252953,
+                0.8621333440557593,
+                -0.17453292519943295,
+                -0.17453292519943295,
+                8.65556854322817e-27,
+                0.1605
+                ],
 
             # Probability of seeding the robot in finale position
-            "reset_final_p": 0.1,
+            "reset_final_p": 1,
             # Termination conditions
             "terminate_upside_down": True,
             "terminate_gyro": True,
@@ -59,7 +75,22 @@ class StandupEnv(gymnasium.Env):
         self.sim = MujocoBDX()
 
         # Degrees of freedom involved
-        self.dofs = ["left_hip_pitch", "right_hip_pitch", "left_knee", "right_knee", "left_ankle", "right_ankle", "neck_pitch", "head_pitch"]
+        # self.dofs = ["left_hip_pitch", "right_hip_pitch", "left_knee", "right_knee", "left_ankle", "right_ankle", "neck_pitch", "head_pitch"]
+        self.dofs =[
+            "left_hip_yaw",
+            "left_hip_roll",
+            "left_hip_pitch",
+            "left_knee",
+            "left_ankle",
+            "right_hip_yaw",
+            "right_hip_roll",
+            "right_hip_pitch",
+            "right_knee",
+            "right_ankle",
+            "neck_pitch",
+            "head_pitch",
+            "head_yaw"
+        ]
         self.ranges = [self.sim.model.actuator(f"{dof}").ctrlrange for dof in self.dofs]
 
         # Pre-fetching indexes and sites for faster evaluation
@@ -390,7 +421,7 @@ class StandupEnv(gymnasium.Env):
         if target:
             initial_tilt = my_target[-1]
         T_world_trunk = tf.rotation_matrix(initial_tilt, [0, 1, 0])
-        T_world_trunk[:3, 3] = [0, 0, 0.4]
+        T_world_trunk[:3, 3] = [0, 0, 0.3]
 
         self.sim.set_T_world_site("trunk", T_world_trunk)
 

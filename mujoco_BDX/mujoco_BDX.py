@@ -10,7 +10,7 @@ class MujocoBDX:
     def __init__(self, model_dir: str | None = None):
         # If model_dir is not provided, use the current directory
         if model_dir is None:
-            model_dir = "./mini_bdx/robots/bdx"
+            model_dir = os.path.join(os.path.dirname(__file__) + "/model/")
         self.model_dir = model_dir
 
         # Load the model and data
